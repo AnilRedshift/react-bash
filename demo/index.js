@@ -17,6 +17,14 @@ const history = [
     { value: 'Type `help` to begin' },
 ];
 
+const google = (state, { args }) => {
+    const searchString = Object.values(args).map(encodeURIComponent).join('+')
+    window.open(`https://www.google.com/search?q=${searchString}`, '_blank');
+    return Object.assign({}, state, {
+        history: state.history.concat([{ value: 'Launched google' }]),
+    });
+};
+
 const structure = {
     '.hidden': {
         file1: { content: 'The is the content for file1 in the <.hidden> directory.' },
@@ -32,6 +40,7 @@ const structure = {
         file3: { content: 'The is the content for file3 in the <public> directory.' },
     },
     'README.md': { content: '✌⊂(✰‿✰)つ✌ Thanks for checking out the tool! There is a lot that you can do with react-bash and I\'m excited to see all of the fun commands and projects build on top of it!' },
+    google: { exec: google },
 };
 
 const Root = <Terminal history={history} structure={structure} extensions={extensions} />;
