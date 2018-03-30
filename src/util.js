@@ -107,6 +107,14 @@ export function getDirectoryByPath(structure, relativePath) {
     return { dir };
 }
 
+export function getFileInformation(path, state) {
+    const relativePath = path.split('/');
+    const fileName = relativePath.pop();
+    const fullPath = extractPath(relativePath.join('/'), state.cwd);
+    const { err, dir } = getDirectoryByPath(state.structure, fullPath);
+    return { err, dir, fileName };
+}
+
 /*
  * This is a utility method for getting the environment
  * variables with the dynamic values updated with state.
