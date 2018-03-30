@@ -119,5 +119,5 @@ export function getEnvVariables(state) {
  * @returns {Boolean} whether the entry is a file
  */
 export function isFile(entry) {
-    return entry.content !== undefined;
+    return entry.content !== undefined || entry.exec !== undefined;
 }
