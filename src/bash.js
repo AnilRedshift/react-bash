@@ -65,6 +65,7 @@ export default class Bash {
                 if (err || !dir[fileName]) {
                     errorOccurred = true;
                 } else if (!dir[fileName].exec) {
+                    errorOccurred = true;
                     return Util.appendError(newState, Errors.NOT_EXECUTABLE, command.name);
                 } else {
                     const nextState = dir[fileName].exec(newState, command);
@@ -73,9 +74,6 @@ export default class Bash {
                 }
             } else {
                 errorOccurred = true;
-            }
-
-            if (errorOccurred) {
                 return Util.appendError(newState, Errors.COMMAND_NOT_FOUND, command.name);
             }
         };
