@@ -60,8 +60,10 @@ export const cat = {
             return Util.appendError(state, err, path);
         } else if (!dir[fileName]) {
             return Util.appendError(state, Errors.NO_SUCH_FILE, path);
-        } else if (!dir[fileName].hasOwnProperty('content')) {
+        } else if (!Util.isFile(dir[fileName])) {
             return Util.appendError(state, Errors.IS_A_DIRECTORY, path);
+        } else if (!dir[fileName].hasOwnProperty('content')) {
+            return Util.appendError(state, Errors.NOT_TEXT, path);
         } else {
             return Object.assign({}, state, {
                 history: state.history.concat({
