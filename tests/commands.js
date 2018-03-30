@@ -118,16 +118,16 @@ describe('bash commands', () => {
         });
 
         it('should display multiline file contents', () => {
-          const state = stateFactory();
-          const expected = [
-            'file2',
-            'hasfour',
-            'newlines',
-            ' ',
-          ];
-          const { history } = bash.commands.cat.exec(state, { args: { 0: 'multilinefile1' } });
-          chai.assert.strictEqual(history.length, 4);
-          chai.assert.deepEqual(history.map(h => h.value), expected);
+            const state = stateFactory();
+            const expected = [
+                'file2',
+                'hasfour',
+                'newlines',
+                ' ',
+            ];
+            const { history } = bash.commands.cat.exec(state, { args: { 0: 'multilinefile1' } });
+            chai.assert.strictEqual(history.length, 4);
+            chai.assert.deepEqual(history.map(h => h.value), expected);
         });
 
         it('should display file contents from path', () => {
