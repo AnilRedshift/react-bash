@@ -52,10 +52,7 @@ export const ls = {
 export const cat = {
     exec: (state, { args }) => {
         const path = args[0];
-        const relativePath = path.split('/');
-        const fileName = relativePath.pop();
-        const fullPath = Util.extractPath(relativePath.join('/'), state.cwd);
-        const { err, dir } = Util.getDirectoryByPath(state.structure, fullPath);
+        const { dir, err, fileName } = Util.getFileInformation(path, state);
         if (err) {
             return Util.appendError(state, err, path);
         } else if (!dir[fileName]) {

@@ -61,11 +61,7 @@ export default class Bash {
                 errorOccurred = errorOccurred || (nextState && nextState.error);
                 return nextState;
             } else if (command.name.includes('/')) {
-                const path = command.name;
-                const relativePath = path.split('/');
-                const fileName = relativePath.pop();
-                const fullPath = Util.extractPath(relativePath.join('/'), state.cwd);
-                const { err, dir } = Util.getDirectoryByPath(state.structure, fullPath);
+                const { dir, err, fileName } = Util.getFileInformation(command.name, state);
                 if (err || !dir[fileName]) {
                     errorOccurred = true;
                 } else if (!dir[fileName].exec) {
