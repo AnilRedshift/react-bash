@@ -54,28 +54,29 @@ export default class Bash {
          * not be run.
          */
         const reducer = (newState, command) => {
+            let nextState;
             if (command.name === '') {
-                return newState;
+                nextState = newState;
             } else if (this.commands[command.name]) {
-                const nextState = this.commands[command.name].exec(newState, command);
+                nextState = this.commands[command.name].exec(newState, command);
                 errorOccurred = errorOccurred || (nextState && nextState.error);
-                return nextState;
             } else if (command.name.includes('/')) {
                 const { dir, err, fileName } = Util.getFileInformation(command.name, state);
                 if (err || !dir[fileName]) {
                     errorOccurred = true;
+                    nextState = Util.appendError(newState, Errors.COMMAND_NOT_FOUND, command.name);
                 } else if (!dir[fileName].exec) {
                     errorOccurred = true;
-                    return Util.appendError(newState, Errors.NOT_EXECUTABLE, command.name);
+                    nextState = Util.appendError(newState, Errors.NOT_EXECUTABLE, command.name);
                 } else {
-                    const nextState = dir[fileName].exec(newState, command);
+                    nextState = dir[fileName].exec(newState, command);
                     errorOccurred = errorOccurred || (nextState && nextState.error);
-                    return nextState;
                 }
             } else {
                 errorOccurred = true;
-                return Util.appendError(newState, Errors.COMMAND_NOT_FOUND, command.name);
+                nextState = Util.appendError(newState, Errors.COMMAND_NOT_FOUND, command.name);
             }
+            return nextState;
         };
 
         while (!errorOccurred && commands.length) {
