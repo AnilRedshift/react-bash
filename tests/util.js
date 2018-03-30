@@ -72,6 +72,15 @@ describe('util method', () => {
             chai.assert.strictEqual(path, 'dir1');
         });
 
+        it('no-ops a directory of ./ ', () => {
+            const path = Util.extractPath('./', '.privateDir');
+            chai.assert.strictEqual(path, '.privateDir');
+        });
+
+        it('strips out a leading ./ when traversing directories', () => {
+            const path = Util.extractPath('./dir1', '.privateDir');
+            chai.assert.strictEqual(path, '.privateDir/dir1');
+        });
     });
 
     describe('getDirectoryByPath', () => {

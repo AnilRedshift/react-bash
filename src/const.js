@@ -8,6 +8,8 @@ export const Errors = {
     NO_SUCH_FILE: '-bash: cd: $1: No such file or directory',
     NOT_A_DIRECTORY: '-bash: cd: $1: Not a directory',
     IS_A_DIRECTORY: 'cat: $1: Is a directory',
+    NOT_EXECUTABLE: '-bash: The file "$1" is not executable',
+    NOT_TEXT: '-cat: The file "$1" is not a text file',
 };
 
 export const EnvVariables = {

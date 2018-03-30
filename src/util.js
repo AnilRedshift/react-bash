@@ -19,6 +19,17 @@ export function trim(str, char) {
 }
 
 /*
+ * This is a utility method for determining if a given filesystem entry is a
+ * file or directoy.
+ *
+ * @param {Object} entry - the filesystem entry
+ * @returns {Boolean} whether the entry is a file
+ */
+export function isFile(entry) {
+    return entry.content !== undefined || entry.exec !== undefined;
+}
+
+/*
  * This is a utility method for appending an error
  * message to the current state.
  *
@@ -47,6 +58,8 @@ export function appendError(state, error, command) {
 export function extractPath(relativePath, rootPath) {
     // Short circuit for relative path
     if (relativePath === '') return rootPath;
+    if (relativePath === '.') return rootPath;
+    relativePath = relativePath.replace(/^.\//, '');
 
     // Strip trailing slash
     relativePath = trim(relativePath, '/');
@@ -81,7 +94,7 @@ export function getDirectoryByPath(structure, relativePath) {
         const key = path[i];
         const child = dir[key];
         if (child && typeof child === 'object') {
-            if (child.hasOwnProperty('content')) {
+            if (isFile(child)) {
                 return { err: Errors.NOT_A_DIRECTORY.replace('$1', relativePath) };
             } else {
                 dir = child;
@@ -92,6 +105,14 @@ export function getDirectoryByPath(structure, relativePath) {
         i++;
     }
     return { dir };
+}
+
+export function getFileInformation(path, state) {
+    const relativePath = path.split('/');
+    const fileName = relativePath.pop();
+    const fullPath = extractPath(relativePath.join('/'), state.cwd);
+    const { err, dir } = getDirectoryByPath(state.structure, fullPath);
+    return { err, dir, fileName };
 }
 
 /*
@@ -107,15 +128,4 @@ export function getEnvVariables(state) {
         envVars[key] = typeof value === 'function' ? value(state) : value;
         return envVars;
     }, {});
-}
-
-/*
- * This is a utility method for determining if a given filesystem entry is a
- * file or directoy.
- *
- * @param {Object} entry - the filesystem entry
- * @returns {Boolean} whether the entry is a file
- */
-export function isFile(entry) {
-    return entry.content !== undefined;
 }

@@ -60,8 +60,22 @@ export default class Bash {
                 const nextState = this.commands[command.name].exec(newState, command);
                 errorOccurred = errorOccurred || (nextState && nextState.error);
                 return nextState;
+            } else if (command.name.includes('/')) {
+                const { dir, err, fileName } = Util.getFileInformation(command.name, state);
+                if (err || !dir[fileName]) {
+                    errorOccurred = true;
+                } else if (!dir[fileName].exec) {
+                    return Util.appendError(newState, Errors.NOT_EXECUTABLE, command.name);
+                } else {
+                    const nextState = dir[fileName].exec(newState, command);
+                    errorOccurred = errorOccurred || (nextState && nextState.error);
+                    return nextState;
+                }
             } else {
                 errorOccurred = true;
+            }
+
+            if (errorOccurred) {
                 return Util.appendError(newState, Errors.COMMAND_NOT_FOUND, command.name);
             }
         };

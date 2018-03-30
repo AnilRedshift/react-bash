@@ -52,16 +52,15 @@ export const ls = {
 export const cat = {
     exec: (state, { args }) => {
         const path = args[0];
-        const relativePath = path.split('/');
-        const fileName = relativePath.pop();
-        const fullPath = Util.extractPath(relativePath.join('/'), state.cwd);
-        const { err, dir } = Util.getDirectoryByPath(state.structure, fullPath);
+        const { dir, err, fileName } = Util.getFileInformation(path, state);
         if (err) {
             return Util.appendError(state, err, path);
         } else if (!dir[fileName]) {
             return Util.appendError(state, Errors.NO_SUCH_FILE, path);
-        } else if (!dir[fileName].hasOwnProperty('content')) {
+        } else if (!Util.isFile(dir[fileName])) {
             return Util.appendError(state, Errors.IS_A_DIRECTORY, path);
+        } else if (!dir[fileName].hasOwnProperty('content')) {
+            return Util.appendError(state, Errors.NOT_TEXT, path);
         } else {
             const content = dir[fileName].content.replace(/\n$/, '');
             const lines = content.split('\n').map(value => ({ value }));
