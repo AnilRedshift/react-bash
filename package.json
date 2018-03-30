@@ -1,6 +1,6 @@
 {
   "name": "@anilredshift/react-bash",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "A configurable/extendable bash terminal component",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
