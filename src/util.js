@@ -47,6 +47,8 @@ export function appendError(state, error, command) {
 export function extractPath(relativePath, rootPath) {
     // Short circuit for relative path
     if (relativePath === '') return rootPath;
+    if (relativePath === '.') return rootPath;
+    relativePath = relativePath.replace(/^.\//, '');
 
     // Strip trailing slash
     relativePath = trim(relativePath, '/');
