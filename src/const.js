@@ -9,7 +9,7 @@ export const Errors = {
     NOT_A_DIRECTORY: '-bash: cd: $1: Not a directory',
     IS_A_DIRECTORY: 'cat: $1: Is a directory',
     NOT_EXECUTABLE: '-bash: The file "$1" is not executable',
-    NOT_TEXT: '-cat: The file "$1" is not a text file',
+    NOT_TEXT: '-cat: The file "$1" is a binary file. Did you mean to execute it?',
 };
 
 export const EnvVariables = {
